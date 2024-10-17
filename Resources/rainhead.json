@@ -1,0 +1,30 @@
+{
+  "total_results": 1,
+  "page": 1,
+  "per_page": 1,
+  "results": [
+    {
+      "id": 728554,
+      "uuid": "412c21cc-4f50-4f61-8cc0-e2227f61890a",
+      "created_at": "2017-12-07T02:30:53+00:00",
+      "description": "From Seattle, trying to pay more attention to the variety of life in the Pacific Northwest and around the world. I have little formal training, and appreciate identification tips, trivia, and corrections.\r\n\r\nLikewise, I do a lot of identifying on here, and don't usually stop to explain myself. Feel free to ask for an explanation.\r\n\r\nI do heuristic identifications of commonly observed species in Western Washington as part of \"triage\" identification. I will often withdraw an ID in the face of credible disagreement and stay quiet on a taxon until I've learned more.\r\n\r\nI often post from the field, then narrow my identifications after further research with the benefit of a monitor.\r\n\r\nI hike with the <a href=\"https://www.mountaineers.org/locations-lodges/seattle-branch/committees/seattle-naturalists-committee\">Mountaineers Naturalists</a>, whose Introduction to the Natural World course is a pretty good place to get started with naturalism.\r\n\r\nPrimary photography gear:\r\n- Olympus E-M1 Mark III (micro four-thirds)\r\n- Olympus M.Zuiko 40-150mm f2.8\r\n- Olympus M.Zuiko 60mm Macro\r\n- Godox TT685O II Flash\r\n\r\nSocial:\r\n- <a rel=\"me\" href=\"https://weirder.earth/@rainhead\">Mastodon</a>\r\n- <a rel=\"me\" href=\"https://github.com/rainhead\">Github</a>\r\n- <a rel=\"me\" href=\"https://instagram.com/peidran\">Instagram</a>\r\n\r\n<h3>Plants</h3>\r\n\r\nI use the <a href=\"https://burkeherbarium.org/imagecollection/\">Burke Herbarium</a> to learn more about species characteristics, range, and to see representative photos. The <a href=\"https://www.pnwherbaria.org/\">PNW Herbaria</a> site is more up to date, but I have not figured out how to use it.\r\n\r\nI am a member of the <a href=\"https://www.wnps.org/\">Washington Native Plant Society</a>. Their website is a great starting point for resources, connecting to people, lectures, and species checklists for Washington hikes.\r\n\r\nOther resources:\r\n- <a href=\"https://www.blm.gov/colorado/blm-library/blm-library/recognizing-plant-families-west\">Recognizing plant families of the West</a>\r\n- <a href=\"http://westcoastcakile.weebly.com/uploads/2/0/6/5/20656104/id_guide.pdf\">Guide to identification of Cakile edentula and maritima in western North America</a> (PDF, searocket)\r\n\r\n<h3>Bees</h3>\r\n\r\nI am a member of the <a href=\"https://www.wanativebeesociety.org/\">Washington Native Bee Society\"</a>. This is a relatively new organization, with lots of energy. Check out the website and come to monthly meetings to get find your starting point with bees.\r\n\r\nI also volunteer with both the Xerces Society's <a href=\"https://www.pnwbumblebeeatlas.org/\">PNW Bumble Bee Atlas</a> and the Washington Department of Agriculture's <a href=\"https://agr.wa.gov/departments/insects-pests-and-weeds/insects/apiary-pollinators/pollinator-health/bee-atlas\">Washington Bee Atlas</a> to identify and map native bee species. We think Washington might have around 700 species of bee, many of them currently unknown or undescribed.\r\n\r\n<b>Agapostemon</b>. In Washington, all are subgenus Agapostemon. In the Seattle area:\r\n- <a href=\"/observations/164930404\">black and white striped abdomen</a> = Agapostemon virescens female\r\n- <a href=\"/observations/135191823\">huge hind legs</a> = Agapostemon femoratus male\r\n\r\nResources:\r\n- [Key to bee genera in the PNW](https://ir.library.oregonstate.edu/concern/technical_reports/xg94hz59f)\r\n- [Introduction to native bees and the Washington Bee Atlas](https://www.youtube.com/watch?v=5X0Auf-BIx8&list=LL&index=26) (YouTube)\r\n- [Native Bees of Washington State](https://crownbees.com/products/native-bees-of-washington-state-poster) (Poster)\r\n\r\n<h4>Bumblebees (Bombus spp.)</h4>\r\n\r\nIf I IDed your female bumblebee in Western Washington as Pyrobombus rather than B. vosensenskii, it's probably because I need a few of the underside (the stergites) to distinguish it from B. caliginosus. If the bee is male (no corbiculae, or it has some yellow on T5), I don't know enough to distinguish the species in any case.\r\n\r\nA view of the hair on the front of the head is also necessary to distinguish these species from B. californicus in this region.\r\n\r\nResources:\r\n- [Bumble Bees of North America](https://press.princeton.edu/books/paperback/9780691152226/bumble-bees-of-north-america) (book)\r\n- [Bumble Bees of the Western United States](https://xerces.org/publications/identification-and-monitoring-guides/bumble-bees-of-western-united-states) (older but available as PDF)\r\n- [Washington Bumble Bees](https://washingtonbumblebees.org/) (website)\r\n- [Key to PNW Bumble Bee Females](https://ir.library.oregonstate.edu/concern/technical_reports/3484zr250)\r\n- [Key to PNW Bumble Bee males](https://ir.library.oregonstate.edu/concern/technical_reports/6q182v23p)\r\n- [Western Bumble Bee Identification](https://www.youtube.com/watch?v=-TlkR59Q1uQ) (YouTube)\r\n- [Male Bumble Bee Identification along the Pacific Coast of North America](https://www.youtube.com/watch?v=M-lRUGg-qeQ) (YouTube)\r\n- [Bumble Bee Biology](https://www.youtube.com/watch?v=HlJamZ02a9M) (YouTube)",
+      "icon": "https://static.inaturalist.org/attachments/users/icons/728554/thumb.jpg?1678498352",
+      "icon_url": "https://static.inaturalist.org/attachments/users/icons/728554/medium.jpg?1678498352",
+      "identifications_count": 35389,
+      "journal_posts_count": 0,
+      "annotated_observations_count": 7276,
+      "last_active": "2024-10-10",
+      "login": "rainhead",
+      "monthly_supporter": true,
+      "name": "Peter Abrahamsen",
+      "observations_count": 5530,
+      "orcid": null,
+      "roles": [],
+      "site_id": null,
+      "spam": false,
+      "species_count": 2183,
+      "suspended": false,
+      "updated_at": "2024-10-10T16:44:05+00:00"
+    }
+  ]
+}

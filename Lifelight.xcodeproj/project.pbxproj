@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D7200D682CC1C0E0000EADA5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */; };
+		D7200D8B2CC1C235000EADA5 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = D7200D8A2CC1C235000EADA5 /* Algorithms */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		D7200D482CC1C072000EADA5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -45,6 +50,11 @@
 			path = LifelightUITests;
 			sourceTree = "<group>";
 		};
+		D7200D802CC1C16A000EADA5 /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +62,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7200D8B2CC1C235000EADA5 /* Algorithms in Frameworks */,
+				D7200D682CC1C0E0000EADA5 /* CachedAsyncImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +91,7 @@
 				D7200D4A2CC1C072000EADA5 /* LifelightTests */,
 				D7200D542CC1C072000EADA5 /* LifelightUITests */,
 				D7200D372CC1C071000EADA5 /* Products */,
+				D7200D802CC1C16A000EADA5 /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,9 +122,12 @@
 			);
 			fileSystemSynchronizedGroups = (
 				D7200D382CC1C071000EADA5 /* Lifelight */,
+				D7200D802CC1C16A000EADA5 /* Resources */,
 			);
 			name = Lifelight;
 			packageProductDependencies = (
+				D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */,
+				D7200D8A2CC1C235000EADA5 /* Algorithms */,
 			);
 			productName = Lifelight;
 			productReference = D7200D362CC1C071000EADA5 /* Lifelight.app */;
@@ -195,6 +211,10 @@
 			);
 			mainGroup = D7200D2D2CC1C071000EADA5;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				D7200D892CC1C235000EADA5 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D7200D372CC1C071000EADA5 /* Products */;
 			projectDirPath = "";
@@ -591,6 +611,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
+		D7200D892CC1C235000EADA5 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
+		D7200D8A2CC1C235000EADA5 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D7200D892CC1C235000EADA5 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D7200D2E2CC1C071000EADA5 /* Project object */;
 }
