@@ -8,7 +8,7 @@
 import Foundation
 import Algorithms
 
-struct MyINaturalistObservations: AsyncSequence {
+struct MyINaturalistObservations {
     typealias Element = [(Date, [INaturalistObservation].SubSequence)]
     static let urlSession = {
         let urlSession = URLSession(configuration: .default)
@@ -18,40 +18,37 @@ struct MyINaturalistObservations: AsyncSequence {
     
     let userName: String
     let db: LLDatabase
-
-    struct AsyncIterator: AsyncIteratorProtocol {
-        let userName: String
-        let db: LLDatabase
+    
+    func fetchAll() async {
         var nextPage: UInt? = 1
-
-        mutating func next() async -> Element? {
-            guard let url else { return nil }
-            let page: PagedResponse<INaturalistObservation> = await fetch(url: url, urlSession: urlSession)
+        while nextPage != nil {
+            let url = url(forPage: nextPage!)
+            let page: PagedResponse<INaturalistObservation> = await fetch(url: url, urlSession: MyINaturalistObservations.urlSession)
             nextPage = page.nextPage
-            db.appendObservations(observations: page.results)
-            let results = page.results.sorted().chunked(on: \.observedOrCreatedOn)
-            return results
-        }
-                
-        var url: URL? {
-            guard let nextPage else { return nil }
-            var url = URL(string: "https://api.inaturalist.org/v2/observations")!
-            url.append(queryItems: [
-                URLQueryItem(name: "fields", value: INaturalistObservation.fieldSpecification),
-                URLQueryItem(name: "page", value: String(nextPage)),
-                URLQueryItem(name: "per_page", value: String(200)),
-                URLQueryItem(name: "order_by", value: "observed_on"),
-                URLQueryItem(name: "order", value: "desc"),
-                URLQueryItem(name: "user_id", value: userName)
-            ])
-            return url
+            receiveObservations(page.results)
         }
     }
     
-    func makeAsyncIterator() -> AsyncIterator {
-        return AsyncIterator(userName: userName, db: db)
+    func receiveObservations(_ observations: [INaturalistObservation]) {
+        db.addTaxa(observations.compactMap(\.taxon).map(\.llTaxon))
+        db.addObservations(observations.map(\.llObservation))
+        db.addObservationPhotos(observations.flatMap(\.llObservationPhotos))
+    }
+    
+    func url(forPage page: UInt) -> URL {
+        var url = URL(string: "https://api.inaturalist.org/v2/observations")!
+        url.append(queryItems: [
+            URLQueryItem(name: "fields", value: INaturalistObservation.fieldSpecification),
+            URLQueryItem(name: "page", value: String(page)),
+            URLQueryItem(name: "per_page", value: String(200)),
+            URLQueryItem(name: "order_by", value: "observed_on"),
+            URLQueryItem(name: "order", value: "desc"),
+            URLQueryItem(name: "user_id", value: userName)
+        ])
+        return url
     }
 }
+
 
 nonisolated func fetch<T: Decodable>(url: URL, urlSession: URLSession) async -> T {
     var request = URLRequest(url: url)

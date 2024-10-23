@@ -10,7 +10,7 @@ import Foundation
 struct INaturalistTaxon: Decodable, Equatable, Identifiable, Hashable {
     static let fieldSpecification = "(id:!t,is_active:!t,name:!t,rank:!t,parent_id:!t,preferred_common_name:!t,rank:!t,uuid:!t,wikipedia_url:!t)"
 
-    let id: UInt64
+    let id: Int64
     let is_active: Bool
     let name: String
     let parent_id: ID?
@@ -62,5 +62,16 @@ struct INaturalistTaxon: Decodable, Equatable, Identifiable, Hashable {
         case variety
         case form
         case infrahybrid // level 5
+    }
+    
+    var llTaxon: LLTaxon {
+        LLTaxon(
+            id: id,
+            isActive: is_active,
+            name: name,
+            parentId: parent_id,
+            preferredCommonName: preferred_common_name,
+            rank: rank.rawValue
+        )
     }
 }

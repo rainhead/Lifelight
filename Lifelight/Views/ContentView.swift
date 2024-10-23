@@ -30,11 +30,11 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    @Previewable @State var observations = {
-        let fixtureURL = Bundle.main.url(forResource: "my_observations", withExtension: "json")!
-        let page: PagedResponse<INaturalistObservation> = loadFixtureFrom(fixtureURL)
-        return page.results.sorted().chunked(on: \.observedOrCreatedOn)
-    }()
-    ContentView(observations: $observations)
-}
+//#Preview {
+//    @Previewable @State var observations = {
+//        let fixtureURL = Bundle.main.url(forResource: "my_observations", withExtension: "json")!
+//        let page: PagedResponse<INaturalistObservation> = loadFixtureFrom(fixtureURL)
+//        return page.results.sorted().chunked(on: \.observedOrCreatedOn)
+//    }()
+//    ContentView(observations: $observations)
+//}

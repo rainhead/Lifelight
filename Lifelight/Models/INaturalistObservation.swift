@@ -8,38 +8,34 @@
 import Foundation
 
 // The JSON representation of an observation, as returned by the API.
-struct INaturalistObservation: Comparable, Decodable, Equatable, Identifiable, Hashable {
+struct INaturalistObservation: Decodable, Equatable, Identifiable, Hashable {
     static let fieldSpecification = "(id:!t,description:!t,uuid:!t,uri:!t,time_observed_at:!t,created_at:!t,updated_at:!t,"
-    + "created_time_zone:!t,observed_time_zone:!t,"
+    + "created_time_zone:!t,observed_on:!t,observed_time_zone:!t,"
     + "annotations:\(INaturalistAnnotation.fieldSpecification),"
     + "quality_grade:!t,faves_count:!t,"
     + "identifications:\(INaturalistIdentification.fieldSpecification),"
     + "taxon:\(INaturalistTaxon.fieldSpecification),user:\(INaturalistUser.fieldSpecification),"
     + "observation_photos:\(INaturalistObservationPhoto.fieldDescription),location:!t)"
 
-    let id: UInt64
+    let id: Int64
 
     let annotations: [INaturalistAnnotation]
     let created_time_zone: String
     let description: String?
     let geoprivacy: Geoprivacy?
     let identifications: [INaturalistIdentification]
-//    @DateFormatted<OptionalISO8601DateStrategy> var observed_on: Date?
     let observation_photos: [INaturalistObservationPhoto]
     let taxon: INaturalistTaxon?
     let uri: URL
     let uuid: UUID
     
+    let created_at: String
+    let updated_at: String
+    let observed_on: String?
+    let time_observed_at: String?
+
     static func == (lhs: INaturalistObservation, rhs: INaturalistObservation) -> Bool {
         lhs.id == rhs.id && lhs.updated_at == rhs.updated_at
-    }
-    
-    static func < (lhs: INaturalistObservation, rhs: INaturalistObservation) -> Bool {
-        if (lhs.observedOrCreatedAt != rhs.observedOrCreatedAt) {
-            lhs.observedOrCreatedAt < rhs.observedOrCreatedAt
-        } else {
-            lhs.id < rhs.id
-        }
     }
 
     func hash(into hasher: inout Hasher) {
@@ -47,23 +43,35 @@ struct INaturalistObservation: Comparable, Decodable, Equatable, Identifiable, H
         hasher.combine(updated_at)
     }
     
-    @DateFormatted<ISO8601DateStrategy> var created_at: Date
-    @DateFormatted<ISO8601DateStrategy> var updated_at: Date
-    @DateFormatted<OptionalISO8601DateStrategy> var time_observed_at: Date?
-    
     enum Geoprivacy: String, Decodable, Equatable {
         case open
         case `private`
         case obscured
     }
     
-    var observedOrCreatedOn: Date {
-        Calendar.current.startOfDay(for: observedOrCreatedAt)
+    var llObservation: LLObservation {
+        LLObservation(
+            id: id,
+            createdAt: created_at.asDate()!,
+            description: description,
+            observedAt: time_observed_at?.asDate(),
+            observedOn: observed_on?.asDay(),
+            updatedAt: updated_at.asDate()!,
+            taxonID: taxon?.id
+        )
     }
     
-    @inlinable
-    var observedOrCreatedAt: Date {
-        time_observed_at ?? created_at
+    var llObservationPhotos: [LLObservationPhoto] {
+        observation_photos.map { obs_photo in
+            LLObservationPhoto(
+                id: obs_photo.id,
+                observationID: id,
+                position: obs_photo.position,
+                originalHeight: obs_photo.photo.original_dimensions.height,
+                originalWidth: obs_photo.photo.original_dimensions.width,
+                squareURL: obs_photo.photo.squareURL
+            )
+        }
     }
 }
 
@@ -82,7 +90,7 @@ struct INaturalistIdentification: Decodable, Equatable, Identifiable, Hashable {
     static let fieldSpecification = "(id:!t,uuid:!t,body:!t,category:!t,created_at:!t,current:!t,disagreement:!t,"
     + "user:\(INaturalistUser.fieldSpecification),taxon:\(INaturalistTaxon.fieldSpecification))"
 
-    let id: UInt64
+    let id: Int64
     
     let body: String?
     let category: Category?
@@ -115,7 +123,7 @@ struct INaturalistIdentification: Decodable, Equatable, Identifiable, Hashable {
 struct INaturalistObservationPhoto: Equatable, Identifiable, Hashable, Decodable {
     static let fieldDescription = "(id:!t,photo:\(INaturalistPhoto.fieldDescription),position:!t)"
     
-    let id: UInt64
+    let id: Int64
     let photo: INaturalistPhoto
     let position: Int
 }
@@ -123,7 +131,7 @@ struct INaturalistObservationPhoto: Equatable, Identifiable, Hashable, Decodable
 struct INaturalistPhoto: Identifiable, Hashable, Decodable {
     static let fieldDescription = "(id:!t,attribution:!t,hidden:!t,license_code:!t,url:!t,original_dimensions:(height:!t,width:!t))"
     
-    let id: UInt64
+    let id: Int64
     let attribution: String
 //    let hidden: Bool
     let license_code: String?
@@ -148,5 +156,27 @@ struct INaturalistPhoto: Identifiable, Hashable, Decodable {
     struct Dimensions: Decodable, Hashable {
         var height: UInt
         var width: UInt
+    }
+}
+
+private let dayFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter
+}()
+
+private let isoFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    return formatter
+}()
+
+extension String {
+    func asDay() -> Date? {
+        dayFormatter.date(from: self)
+    }
+    
+    func asDate() -> Date? {
+        isoFormatter.date(from: self)
     }
 }
