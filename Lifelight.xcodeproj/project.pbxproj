@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D7200D682CC1C0E0000EADA5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */; };
 		D7200D8B2CC1C235000EADA5 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = D7200D8A2CC1C235000EADA5 /* Algorithms */; };
+		D72D66F22CC8762500A6702C /* DuckDB in Frameworks */ = {isa = PBXBuildFile; productRef = D72D66F12CC8762500A6702C /* DuckDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 			files = (
 				D7200D8B2CC1C235000EADA5 /* Algorithms in Frameworks */,
 				D7200D682CC1C0E0000EADA5 /* CachedAsyncImage in Frameworks */,
+				D72D66F22CC8762500A6702C /* DuckDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +130,7 @@
 			packageProductDependencies = (
 				D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */,
 				D7200D8A2CC1C235000EADA5 /* Algorithms */,
+				D72D66F12CC8762500A6702C /* DuckDB */,
 			);
 			productName = Lifelight;
 			productReference = D7200D362CC1C071000EADA5 /* Lifelight.app */;
@@ -214,6 +217,7 @@
 			packageReferences = (
 				D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				D7200D892CC1C235000EADA5 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				D72D66F02CC8762500A6702C /* XCRemoteSwiftPackageReference "duckdb-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D7200D372CC1C071000EADA5 /* Products */;
@@ -629,6 +633,14 @@
 				minimumVersion = 1.2.0;
 			};
 		};
+		D72D66F02CC8762500A6702C /* XCRemoteSwiftPackageReference "duckdb-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/duckdb/duckdb-swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -641,6 +653,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D7200D892CC1C235000EADA5 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		D72D66F12CC8762500A6702C /* DuckDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D72D66F02CC8762500A6702C /* XCRemoteSwiftPackageReference "duckdb-swift" */;
+			productName = DuckDB;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

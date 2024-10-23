@@ -46,7 +46,7 @@ struct ISO8601DateStrategy: CodingStrategy {
 
 struct OptionalISO8601DateStrategy: CodingStrategy {
     static func decode(_ value: String?) -> Date? {
-        guard let value = value else { return nil }
+        guard let value else { return nil }
         return ISO8601DateStrategy.decode(value)
     }
 }

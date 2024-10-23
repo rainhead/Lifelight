@@ -29,16 +29,6 @@ struct ContentView: View {
 #endif
     }
 }
-    
-extension INaturalistObservation {
-    var isFemale: Bool {
-        annotations.count { $0.controlled_value_id == INaturalistControlledValue.male.id } < annotations.count { $0.controlled_value_id == INaturalistControlledValue.female.id }
-    }
-    
-    var isMale: Bool {
-        annotations.count { $0.controlled_value_id == INaturalistControlledValue.male.id  } > annotations.count { $0.controlled_value_id == INaturalistControlledValue.female.id }
-    }
-}
 
 #Preview {
     @Previewable @State var observations = {

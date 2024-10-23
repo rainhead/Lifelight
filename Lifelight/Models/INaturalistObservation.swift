@@ -118,10 +118,6 @@ struct INaturalistObservationPhoto: Equatable, Identifiable, Hashable, Decodable
     let id: UInt64
     let photo: INaturalistPhoto
     let position: Int
-    
-    var chunkID: String {
-        "chunk-\(id)"
-    }
 }
 
 struct INaturalistPhoto: Identifiable, Hashable, Decodable {

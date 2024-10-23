@@ -11,13 +11,14 @@ import SwiftUI
 struct LifelightApp: App {
     @State var userName = "rainhead"
     @State var observations = [(Date, [INaturalistObservation].SubSequence)]()
+    @State var db = LLDatabase()
     
     var body: some Scene {
         WindowGroup {
             ContentView(observations: $observations)
                 .task(id: userName) {
                     let startTime = CFAbsoluteTimeGetCurrent()
-                    for await update in MyINaturalistObservations(userName: userName) {
+                    for await update in MyINaturalistObservations(userName: userName, db: db) {
                         debugPrint("Got update")
                         for (day, observations) in update {
                             if let index = self.observations.firstIndex(where: { $0.0 == day }) {
