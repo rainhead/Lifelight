@@ -9,24 +9,41 @@ import SwiftUI
 
 struct ContentView: View {
     @Binding var photosByDay: [(Date, [LLPhotoWithObservation].SubSequence)]
+    @Binding var calendarFilter: DateComponents
     
     let imageWidth: Double = 80
     let imageSpacing: Double = 5.0
     
     var body: some View {
-        List(photosByDay, id: \.0) { (day, photos) in
-            Section(day.formatted(date: .abbreviated, time: .omitted)) {
-                PhotoGrid(photos: photos)
+        VStack {
+            HStack {
+                Spacer()
+                Text(String(calendarFilter.year ?? 2000)).opacity(calendarFilter.year == nil ? 0 : 1)
+                Menu {
+                    Picker(selection: $calendarFilter.year, label: Text("Year")) {
+                        Text("All").tag(nil as Int?)
+                        Text("2024").tag(2024)
+                        Text("2023").tag(2023)
+                    }
+                } label: {
+                    Image(systemName: "calendar")
+                }
             }
-            .listSectionSeparator(.hidden)
-            .listRowInsets(.none)
-            .listRowSeparator(.hidden)
-        }
+            .padding(.horizontal)
+            List(photosByDay, id: \.0) { (day, photos) in
+                Section(day.formatted(date: .abbreviated, time: .omitted)) {
+                    PhotoGrid(photos: photos)
+                }
+                .listSectionSeparator(.hidden)
+                .listRowInsets(.none)
+                .listRowSeparator(.hidden)
+            }
 #if os(macOS)
-        .listStyle(.plain)
+            .listStyle(.plain)
 #else
-        .listStyle(.grouped)
+            .listStyle(.grouped)
 #endif
+        }
     }
 }
 

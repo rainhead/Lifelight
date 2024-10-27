@@ -18,11 +18,19 @@ struct MyINaturalistObservations {
     }()
     
     let userName: String
-    let db: LLDatabase
+    let db: LLDatabase = LLDatabase()
     
-    func photosByDay() -> [(Date, [LLPhotoWithObservation].SubSequence)] {
+    func photosByDay(calendarFilter: DateComponents) -> [(Date, [LLPhotoWithObservation].SubSequence)] {
         let rows = try! db.queue.read { db in
-            let request = LLObservationPhoto.including(required: LLObservationPhoto.observation).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
+            var request = LLObservationPhoto.including(required: LLObservationPhoto.observation).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
+            if calendarFilter.year != nil {
+                let startOfYear = Calendar.current.date(from: calendarFilter)!
+                request = request.filter(
+                    sql: "coalesce(observedOn, observations.createdAt) between ? and ?",
+                    arguments: [startOfYear, Calendar.current.date(byAdding: .year, value: 1, to: startOfYear)]
+                )
+            }
+            db.trace { print($0) }
             return try LLPhotoWithObservation.fetchAll(db, request)
         }
         return rows.chunked(on: { $0.observation.observedOrCreatedOn })
