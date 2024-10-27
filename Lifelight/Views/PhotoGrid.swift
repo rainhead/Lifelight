@@ -9,18 +9,17 @@ import CachedAsyncImage
 import SwiftUI
 
 struct PhotoGrid: View {
-    let observations: [INaturalistObservation].SubSequence
+    let photos: [LLPhotoWithObservation].SubSequence
     let imageWidth: Double = 80
     let imageSpacing: Double = 5.0
     
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: imageWidth, maximum: imageWidth*1.2))], alignment: .leading, spacing: imageSpacing) {
-            ForEach(observations.flatMap { obs in obs.observation_photos.map { photo in (obs, photo) } }, id: \.1.id) { pair in
-                let (observation, photo) = pair
+            ForEach(photos) { photo in
                 CachedAsyncImage(url: photo.photo.smallURL) { phase in
                     switch phase {
                     case .failure(_): Color.gray
-                    case .success(let image): Link(destination: observation.uri) {
+                    case .success(let image): Link(destination: photo.observation.uri) {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)

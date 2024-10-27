@@ -9,21 +9,21 @@ import Foundation
 import GRDB
 
 final class LLDatabase {
-    private let queue: DatabaseQueue
+    let queue: DatabaseQueue
     
     init() {
         do {
             self.queue = try DatabaseQueue()
             try queue.write { db in
-                try db.create(table: "llTaxon") { t in
+                try db.create(table: "taxa") { t in
                     t.primaryKey("id", .integer)
                     t.column("isActive", .boolean).notNull()
                     t.column("name", .text).notNull()
-                    t.column("parentID", .integer)
+                    t.column("parentId", .integer)
                     t.column("preferredCommonName", .text)
                     t.column("rank", .text).notNull()
                 }
-                try db.create(table: "llObservation") { t in
+                try db.create(table: "observations") { t in
                     t.primaryKey("id", .integer)
                     t.column("createdAt", .datetime).notNull()
                     t.column("description", .text)
@@ -31,10 +31,11 @@ final class LLDatabase {
                     t.column("observedOn", .date)
                     t.column("updatedAt", .datetime).notNull()
                     t.column("taxonID", .integer)
+                    t.column("uri", .text).notNull()
                 }
-                try db.create(table: "llObservationPhoto") { t in
+                try db.create(table: "observationPhotos") { t in
                     t.primaryKey("id", .integer)
-                    t.column("observationID", .integer).notNull().indexed()
+                    t.column("observationId", .integer).notNull().indexed()
                     t.column("position", .integer).notNull()
                     t.column("originalHeight", .integer).notNull()
                     t.column("originalWidth", .integer).notNull()

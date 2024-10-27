@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var observations: [(Date, [INaturalistObservation].SubSequence)]
+    @Binding var photosByDay: [(Date, [LLPhotoWithObservation].SubSequence)]
     
     let imageWidth: Double = 80
     let imageSpacing: Double = 5.0
     
     var body: some View {
-        List(observations, id: \.0) { (day, observations) in
+        List(photosByDay, id: \.0) { (day, photos) in
             Section(day.formatted(date: .abbreviated, time: .omitted)) {
-                PhotoGrid(observations: observations)
+                PhotoGrid(photos: photos)
             }
             .listSectionSeparator(.hidden)
             .listRowInsets(.none)

@@ -9,11 +9,25 @@ import Foundation
 import GRDB
 
 struct LLObservation: Codable, Identifiable, FetchableRecord, PersistableRecord {
+    static let databaseTableName: String = "observations"
+    
     let id: Int64
     let createdAt: Date
     let description: String?
     let observedAt: Date?
     let observedOn: Date? // in local timezone
     let updatedAt: Date
-    let taxonID: LLTaxon.ID?
+    let taxonId: LLTaxon.ID?
+    let uri: URL
+}
+
+extension LLObservation {
+    static let photos = hasMany(LLObservationPhoto.self)
+    static let taxon = belongsTo(LLTaxon.self, using: ForeignKey(["taxonId"]))
+}
+
+extension LLObservation {
+    var observedOrCreatedOn: Date {
+        observedOn ?? Calendar.current.startOfDay(for: createdAt)
+    }
 }

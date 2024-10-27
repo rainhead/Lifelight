@@ -7,9 +7,10 @@
 
 import Foundation
 import Algorithms
+import GRDB
 
 struct MyINaturalistObservations {
-    typealias Element = [(Date, [INaturalistObservation].SubSequence)]
+    
     static let urlSession = {
         let urlSession = URLSession(configuration: .default)
         urlSession.configuration.urlCache?.diskCapacity = 256 * 1024 * 1024 // bytes
@@ -18,6 +19,14 @@ struct MyINaturalistObservations {
     
     let userName: String
     let db: LLDatabase
+    
+    func photosByDay() -> [(Date, [LLPhotoWithObservation].SubSequence)] {
+        let rows = try! db.queue.read { db in
+            let request = LLObservationPhoto.including(required: LLObservationPhoto.observation).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
+            return try LLPhotoWithObservation.fetchAll(db, request)
+        }
+        return rows.chunked(on: { $0.observation.observedOrCreatedOn })
+    }
     
     func fetchAll() async {
         var nextPage: UInt? = 1

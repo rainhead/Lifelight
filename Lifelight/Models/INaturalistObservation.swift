@@ -57,7 +57,8 @@ struct INaturalistObservation: Decodable, Equatable, Identifiable, Hashable {
             observedAt: time_observed_at?.asDate(),
             observedOn: observed_on?.asDay(),
             updatedAt: updated_at.asDate()!,
-            taxonID: taxon?.id
+            taxonId: taxon?.id,
+            uri: uri
         )
     }
     
@@ -65,7 +66,7 @@ struct INaturalistObservation: Decodable, Equatable, Identifiable, Hashable {
         observation_photos.map { obs_photo in
             LLObservationPhoto(
                 id: obs_photo.id,
-                observationID: id,
+                observationId: id,
                 position: obs_photo.position,
                 originalHeight: obs_photo.photo.original_dimensions.height,
                 originalWidth: obs_photo.photo.original_dimensions.width,
