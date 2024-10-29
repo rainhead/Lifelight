@@ -12,7 +12,7 @@ struct LLObservationPhoto: Codable, Identifiable, FetchableRecord, PersistableRe
     static let databaseTableName: String = "observationPhotos"
     
     let id: Int64
-    let observationId: Int64
+    let observationId: LLObservation.ID
     let position: Int
     let originalHeight: UInt
     let originalWidth: UInt

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D705B9042CD0A32D0071D126 /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = D705B9032CD0A32D0071D126 /* Nuke */; };
+		D705B9062CD0A32D0071D126 /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = D705B9052CD0A32D0071D126 /* NukeUI */; };
 		D7200D682CC1C0E0000EADA5 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */; };
 		D7200D8B2CC1C235000EADA5 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = D7200D8A2CC1C235000EADA5 /* Algorithms */; };
 		D72D66FE2CC95DC400A6702C /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = D72D66FD2CC95DC400A6702C /* GRDB */; };
@@ -63,9 +65,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D705B9062CD0A32D0071D126 /* NukeUI in Frameworks */,
 				D72D66FE2CC95DC400A6702C /* GRDB in Frameworks */,
 				D7200D8B2CC1C235000EADA5 /* Algorithms in Frameworks */,
 				D7200D682CC1C0E0000EADA5 /* CachedAsyncImage in Frameworks */,
+				D705B9042CD0A32D0071D126 /* Nuke in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +135,8 @@
 				D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */,
 				D7200D8A2CC1C235000EADA5 /* Algorithms */,
 				D72D66FD2CC95DC400A6702C /* GRDB */,
+				D705B9032CD0A32D0071D126 /* Nuke */,
+				D705B9052CD0A32D0071D126 /* NukeUI */,
 			);
 			productName = Lifelight;
 			productReference = D7200D362CC1C071000EADA5 /* Lifelight.app */;
@@ -218,6 +224,7 @@
 				D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 				D7200D892CC1C235000EADA5 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				D72D66FC2CC95DC400A6702C /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				D705B9022CD0A32D0071D126 /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D7200D372CC1C071000EADA5 /* Products */;
@@ -617,6 +624,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D705B9022CD0A32D0071D126 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.8.0;
+			};
+		};
 		D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
@@ -644,6 +659,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D705B9032CD0A32D0071D126 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D705B9022CD0A32D0071D126 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		D705B9052CD0A32D0071D126 /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D705B9022CD0A32D0071D126 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
 		D7200D672CC1C0E0000EADA5 /* CachedAsyncImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D7200D662CC1C0E0000EADA5 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;

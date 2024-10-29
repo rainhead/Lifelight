@@ -7,27 +7,28 @@
 
 import CachedAsyncImage
 import SwiftUI
+import NukeUI
 
 struct PhotoGrid: View {
     let photos: [LLPhotoWithObservation].SubSequence
-    let imageWidth: Double = 80
+    let imageWidth: Double = 82
     let imageSpacing: Double = 5.0
     
     var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: imageWidth, maximum: imageWidth*1.2))], alignment: .leading, spacing: imageSpacing) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: imageWidth, maximum: imageWidth))], alignment: .leading, spacing: imageSpacing) {
             ForEach(photos) { photo in
-                CachedAsyncImage(url: photo.photo.smallURL) { phase in
-                    switch phase {
-                    case .failure(_): Color.gray
-                    case .success(let image): Link(destination: photo.observation.uri) {
+                LazyImage(url: photo.photo.smallURL) { state in
+                    if let image = state.image {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
                             .clipped()
                             .aspectRatio(1, contentMode: .fit)
-                    }
-                    default: ProgressView()
+                    } else if state.error != nil {
+                        Color.red
+                    } else {
+                        Color.gray
                     }
                 }.frame(height: imageWidth)
             }

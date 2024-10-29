@@ -9,28 +9,27 @@ import Foundation
 import Algorithms
 import GRDB
 
-struct MyINaturalistObservations {
-    
+class MyObservations: Equatable, Observable {
     static let urlSession = {
         let urlSession = URLSession(configuration: .default)
         urlSession.configuration.urlCache?.diskCapacity = 256 * 1024 * 1024 // bytes
         return urlSession
     }()
     
+    static func == (lhs: MyObservations, rhs: MyObservations) -> Bool {
+        lhs.userName == rhs.userName
+    }
+    
     let userName: String
     let db: LLDatabase = LLDatabase()
     
-    func photosByDay(calendarFilter: DateComponents) -> [(Date, [LLPhotoWithObservation].SubSequence)] {
+    init(userName: String) {
+        self.userName = userName
+    }
+    
+    func photosByDay() -> [(Date, [LLPhotoWithObservation].SubSequence)] {
         let rows = try! db.queue.read { db in
-            var request = LLObservationPhoto.including(required: LLObservationPhoto.observation).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
-            if calendarFilter.year != nil {
-                let startOfYear = Calendar.current.date(from: calendarFilter)!
-                request = request.filter(
-                    sql: "coalesce(observedOn, observations.createdAt) between ? and ?",
-                    arguments: [startOfYear, Calendar.current.date(byAdding: .year, value: 1, to: startOfYear)]
-                )
-            }
-            db.trace { print($0) }
+            let request = LLObservationPhoto.including(required: LLObservationPhoto.observation).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
             return try LLPhotoWithObservation.fetchAll(db, request)
         }
         return rows.chunked(on: { $0.observation.observedOrCreatedOn })
@@ -40,10 +39,16 @@ struct MyINaturalistObservations {
         var nextPage: UInt? = 1
         while nextPage != nil {
             let url = url(forPage: nextPage!)
-            let page: PagedResponse<INaturalistObservation> = await fetch(url: url, urlSession: MyINaturalistObservations.urlSession)
+            let page: PagedResponse<INaturalistObservation> = await fetch(url: url, urlSession: MyObservations.urlSession)
             nextPage = page.nextPage
             receiveObservations(page.results)
         }
+    }
+    
+    func loadFixture(named: String) {
+        let fixtureURL = Bundle.main.url(forResource: "my_observations", withExtension: "json")!
+        let page: PagedResponse<INaturalistObservation> = loadFixtureFrom(fixtureURL)
+        receiveObservations(page.results)
     }
     
     func receiveObservations(_ observations: [INaturalistObservation]) {

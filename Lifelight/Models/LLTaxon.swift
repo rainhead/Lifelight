@@ -14,7 +14,7 @@ struct LLTaxon: Codable, Identifiable, FetchableRecord, PersistableRecord {
     let id: Int64
     let isActive: Bool
     let name: String
-    let parentId: Int64?
+    let parentId: ID?
     let preferredCommonName: String?
     let rank: String
 }

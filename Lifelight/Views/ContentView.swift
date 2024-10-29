@@ -7,51 +7,56 @@
 
 import SwiftUI
 
+let species = [
+    "Bombus caliginosus",
+    "Bombus fervidus",
+    "Bombus mixtus",
+    "Bombus nevadensis",
+    "Bombus vosnesenskii",
+    "Coelioxys rufitarsis",
+    "Halictus rubicundus"
+]
+
 struct ContentView: View {
     @Binding var photosByDay: [(Date, [LLPhotoWithObservation].SubSequence)]
-    @Binding var calendarFilter: DateComponents
-    
-    let imageWidth: Double = 80
-    let imageSpacing: Double = 5.0
+    @State var taxonFilter: String = ""
     
     var body: some View {
+        let taxonSearch = taxonFilter.lowercased()
+        let suggestions = species.filter { $0.lowercased().starts(with: taxonSearch) }
         VStack {
-            HStack {
-                Spacer()
-                Text(String(calendarFilter.year ?? 2000)).opacity(calendarFilter.year == nil ? 0 : 1)
-                Menu {
-                    Picker(selection: $calendarFilter.year, label: Text("Year")) {
-                        Text("All").tag(nil as Int?)
-                        Text("2024").tag(2024)
-                        Text("2023").tag(2023)
-                    }
-                } label: {
-                    Image(systemName: "calendar")
+            TextField("Taxon", text: $taxonFilter)
+                .textInputSuggestions(suggestions, id: \.self) { species in
+                    Text(species).textInputCompletion(species)
                 }
-            }
-            .padding(.horizontal)
+//            HStack {
+//                Spacer()
+//                DatePicker("Since", selection: $sinceDate, displayedComponents: [.date])
+//                DatePicker("Until", selection: $untilDate, displayedComponents: [.date])
+//            }
+//            .padding(.horizontal)
             List(photosByDay, id: \.0) { (day, photos) in
                 Section(day.formatted(date: .abbreviated, time: .omitted)) {
                     PhotoGrid(photos: photos)
+                        .listRowInsets(.none)
                 }
                 .listSectionSeparator(.hidden)
-                .listRowInsets(.none)
                 .listRowSeparator(.hidden)
             }
-#if os(macOS)
+            #if os(macOS)
             .listStyle(.plain)
-#else
+            #else
             .listStyle(.grouped)
-#endif
+            #endif
         }
     }
 }
 
-//#Preview {
-//    @Previewable @State var observations = {
-//        let fixtureURL = Bundle.main.url(forResource: "my_observations", withExtension: "json")!
-//        let page: PagedResponse<INaturalistObservation> = loadFixtureFrom(fixtureURL)
-//        return page.results.sorted().chunked(on: \.observedOrCreatedOn)
-//    }()
-//    ContentView(observations: $observations)
-//}
+#Preview {
+    @Previewable @State var observations = {
+        let myObs = MyObservations(userName: "rainhead")
+        myObs.loadFixture(named: "my_observations")
+        return myObs.photosByDay()
+    }()
+    ContentView(photosByDay: .constant(observations))
+}
