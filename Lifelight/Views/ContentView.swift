@@ -24,30 +24,29 @@ struct ContentView: View {
     var body: some View {
         let taxonSearch = taxonFilter.lowercased()
         let suggestions = species.filter { $0.lowercased().starts(with: taxonSearch) }
-        VStack {
-            TextField("Taxon", text: $taxonFilter)
-                .textInputSuggestions(suggestions, id: \.self) { species in
-                    Text(species).textInputCompletion(species)
+        NavigationStack {
+            VStack {
+                //            HStack {
+                //                Spacer()
+                //                DatePicker("Since", selection: $sinceDate, displayedComponents: [.date])
+                //                DatePicker("Until", selection: $untilDate, displayedComponents: [.date])
+                //            }
+                //            .padding(.horizontal)
+                List(photosByDay, id: \.0) { (day, photos) in
+                    Section(day.formatted(date: .abbreviated, time: .omitted)) {
+                        PhotoGrid(photos: photos)
+                            .listRowInsets(.none)
+                    }
+                    .listSectionSeparator(.hidden)
+                    .listRowSeparator(.hidden)
                 }
-//            HStack {
-//                Spacer()
-//                DatePicker("Since", selection: $sinceDate, displayedComponents: [.date])
-//                DatePicker("Until", selection: $untilDate, displayedComponents: [.date])
-//            }
-//            .padding(.horizontal)
-            List(photosByDay, id: \.0) { (day, photos) in
-                Section(day.formatted(date: .abbreviated, time: .omitted)) {
-                    PhotoGrid(photos: photos)
-                        .listRowInsets(.none)
-                }
-                .listSectionSeparator(.hidden)
-                .listRowSeparator(.hidden)
+#if os(macOS)
+                .listStyle(.plain)
+#else
+                .listStyle(.grouped)
+#endif
             }
-            #if os(macOS)
-            .listStyle(.plain)
-            #else
-            .listStyle(.grouped)
-            #endif
+            .searchable(text: $taxonFilter)
         }
     }
 }
