@@ -35,6 +35,7 @@ struct PhotoGrid: View {
                     }
                 }
                 .pipeline(PhotoGrid.pipeline)
+                .frame(minHeight: imageWidth)
             }
         }
     }

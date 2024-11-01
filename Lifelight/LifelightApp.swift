@@ -6,28 +6,21 @@
 //
 
 import SwiftUI
+import Combine
 
 @main
 struct LifelightApp: App {
-    @State var photosByDay = [(Date, [LLPhotoWithObservation].SubSequence)]()
-    @State var myObservations = MyObservations(userName: "rainhead")
+    @State var userName = "rainhead"
+    @State var iNaturalistAPI = INaturalistAPI()
 
     var body: some Scene {
         WindowGroup {
-            ContentView(photosByDay: $photosByDay)
-                .task {
-                    let startTime = CFAbsoluteTimeGetCurrent()
-                    await myObservations.fetchAll()
-                    let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
-                    debugPrint("Done fetching data. Elapsed time: \(timeElapsed) seconds.")
-                    getPhotos()
+            ContentView()
+                .onAppear() {
+                    Task {
+                        await iNaturalistAPI.fetchObservations(byUser: userName)
+                    }
                 }
-                .onChange(of: myObservations, getPhotos)
-                .onChange(of: myObservations, getPhotos)
         }
-    }
-    
-    func getPhotos() {
-        photosByDay = myObservations.photosByDay()
     }
 }

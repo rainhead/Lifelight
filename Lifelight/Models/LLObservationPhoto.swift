@@ -7,6 +7,7 @@
 
 import Foundation
 import GRDB
+import Algorithms
 
 struct LLObservationPhoto: Codable, Identifiable, FetchableRecord, PersistableRecord {
     static let databaseTableName: String = "observationPhotos"
@@ -40,4 +41,12 @@ struct LLPhotoWithObservation: Identifiable, FetchableRecord, Decodable {
     let photo: LLObservationPhoto
     
     var id: LLObservationPhoto.ID { photo.id }
+    
+    static func chunkByDay(photos: [Self]) -> [(Date, [Self].SubSequence)] {
+        let startTime = CFAbsoluteTimeGetCurrent()
+        let chunks = photos.chunked(on: { $0.observation.observedOrCreatedOn })
+        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        debugPrint("Done chunking data. Elapsed time: \(timeElapsed) seconds.")
+        return chunks
+    }
 }

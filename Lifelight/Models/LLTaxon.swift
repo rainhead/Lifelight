@@ -8,8 +8,12 @@
 import Foundation
 import GRDB
 
-struct LLTaxon: Codable, Identifiable, FetchableRecord, PersistableRecord {
+struct LLTaxon: Codable, Equatable, Identifiable, FetchableRecord, PersistableRecord {
     static let databaseTableName: String = "taxa"
+    
+    static func == (lhs: LLTaxon, rhs: LLTaxon) -> Bool {
+        lhs.id == rhs.id
+    }
     
     let id: Int64
     let isActive: Bool
@@ -21,4 +25,10 @@ struct LLTaxon: Codable, Identifiable, FetchableRecord, PersistableRecord {
 
 extension LLTaxon {
     static let parent = belongsTo(LLTaxon.self, key: "parentId")
+    
+    static func matching(substring: String) -> [Self] {
+        return try! LLDatabase.shared.queue.read { db in
+            return try LLTaxon.filter(sql: "instr(lower(name), ?) > 0", arguments: [substring]).limit(10).fetchAll(db)
+        }
+    }
 }
