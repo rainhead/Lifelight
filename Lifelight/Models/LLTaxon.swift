@@ -15,7 +15,7 @@ struct LLTaxon: Codable, Equatable, Identifiable, FetchableRecord, PersistableRe
         lhs.id == rhs.id
     }
     
-    let id: Int64
+    let id: Int
     let isActive: Bool
     let name: String
     let parentId: ID?

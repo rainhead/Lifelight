@@ -10,7 +10,7 @@ import Foundation
 struct INaturalistTaxon: Decodable, Equatable, Identifiable, Hashable {
     static let fieldSpecification = "(id:!t,is_active:!t,name:!t,rank:!t,parent_id:!t,preferred_common_name:!t,rank:!t,uuid:!t,wikipedia_url:!t)"
 
-    let id: Int64
+    let id: Int
     let is_active: Bool
     let name: String
     let parent_id: ID?
