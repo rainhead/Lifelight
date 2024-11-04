@@ -16,9 +16,11 @@ struct LLDatabase {
 
     init() {
         do {
-            self.queue = try DatabaseQueue()
+            let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("lifelight.sqlite")
+            debugPrint("Initializing database at \(path.absoluteString)")
+            self.queue = try DatabaseQueue(path: path.absoluteString)
             try queue.write { db in
-                try db.create(table: "taxa") { t in
+                try db.create(table: "taxa", ifNotExists: true) { t in
                     t.primaryKey("id", .integer)
                     t.column("isActive", .boolean).notNull()
                     t.column("name", .text).notNull().indexed()
@@ -26,7 +28,7 @@ struct LLDatabase {
                     t.column("preferredCommonName", .text)
                     t.column("rank", .text).notNull()
                 }
-                try db.create(table: "observations") { t in
+                try db.create(table: "observations", ifNotExists: true) { t in
                     t.primaryKey("id", .integer)
                     t.column("createdAt", .datetime).notNull()
                     t.column("description", .text)
@@ -36,7 +38,7 @@ struct LLDatabase {
                     t.column("taxonID", .integer)
                     t.column("uri", .text).notNull()
                 }
-                try db.create(table: "observationPhotos") { t in
+                try db.create(table: "observationPhotos", ifNotExists: true) { t in
                     t.primaryKey("id", .integer)
                     t.column("observationId", .integer).notNull().indexed()
                     t.column("position", .integer).notNull()

@@ -21,6 +21,11 @@ struct LLTaxon: Codable, Equatable, Identifiable, FetchableRecord, PersistableRe
     let parentId: ID?
     let preferredCommonName: String?
     let rank: String
+    
+    static func descendants(of ids: [ID]) -> CommonTableExpression<Void> {
+        let sql = "SELECT id FROM taxa WHERE id IN (\(ids.map(String.init).joined(separator: ","))) UNION ALL SELECT taxa.id FROM taxa JOIN descendants ON taxa.parentId = descendants.id"
+        return CommonTableExpression(recursive: true, named: "descendants", columns: ["id"], sql: sql)
+    }
 }
 
 extension LLTaxon {
@@ -32,3 +37,4 @@ extension LLTaxon {
         }
     }
 }
+

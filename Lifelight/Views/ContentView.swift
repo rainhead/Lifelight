@@ -128,11 +128,13 @@ struct ContentView: View {
         }
     }
     
+    // Any of these taxa (if any) AND any of these months (if any)
     var dbRequest: QueryInterfaceRequest<LLObservationPhoto> {
         var observation = LLObservationPhoto.observation
         let selectedTaxa = selectedRefinements.compactMap { if case let .taxon(taxon) = $0 { taxon.id } else { nil } }
         if !selectedTaxa.isEmpty {
-            observation = observation.filter(selectedTaxa.contains(Column("taxonId")))
+            let cte = LLTaxon.descendants(of: selectedTaxa)
+            observation = observation.with(cte).filter(cte.all().contains(Column("taxonId")))
         }
         let selectedMonths = selectedRefinements.compactMap { if case let .month(month) = $0 { month.rawValue } else { nil } }
         if !selectedMonths.isEmpty {
