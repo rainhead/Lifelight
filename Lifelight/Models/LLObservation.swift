@@ -19,6 +19,13 @@ struct LLObservation: Codable, Identifiable, FetchableRecord, PersistableRecord 
     let updatedAt: Date
     let taxonId: LLTaxon.ID?
     let uri: URL
+    
+    static func highestId() -> Int? {
+        let queue = LLDatabase.shared.queue
+        return try! queue.read { db in
+            return try Int.fetchOne(db, sql: "SELECT MAX(id) FROM observations")
+        }
+    }
 }
 
 extension LLObservation {

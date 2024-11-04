@@ -16,13 +16,14 @@ struct INaturalistAPI {
         return urlSession
     }()
     
-    func fetchObservations(byUser userName: String) async {
+    func fetchObservations(byUser userName: String, idAbove: Int?) async {
         var url = observationsBaseURL
         url.append(queryItems: [
             URLQueryItem(name: "fields", value: INaturalistObservation.fieldSpecification),
+            URLQueryItem(name: "id_above", value: String(idAbove ?? 0)),
             URLQueryItem(name: "per_page", value: String(200)),
-            URLQueryItem(name: "order_by", value: "observed_on"),
-            URLQueryItem(name: "order", value: "desc"),
+            URLQueryItem(name: "order_by", value: "id"),
+            URLQueryItem(name: "order", value: "asc"),
             URLQueryItem(name: "user_id", value: userName)
         ])
         await fetchObservations(fromURL: url)
@@ -49,7 +50,6 @@ nonisolated func fetch<T: Decodable>(url: URL, urlSession: URLSession) async -> 
     request.allowsCellularAccess = true
     request.allowsExpensiveNetworkAccess = false
     request.allowsConstrainedNetworkAccess = false
-    request.cachePolicy = .returnCacheDataElseLoad // !!!
     request.httpShouldUsePipelining = true
 //    if let oauthToken {
 //        request.addValue("Bearer \(oauthToken)", forHTTPHeaderField: "Authorization")

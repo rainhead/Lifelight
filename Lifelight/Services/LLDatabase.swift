@@ -109,7 +109,6 @@ struct LLDatabase {
     nonisolated func fetchAll<T: FetchableRecord & Sendable>(request: some FetchRequest) async -> [T] {
         let startTime = CFAbsoluteTimeGetCurrent()
         let records = try! await LLDatabase.shared.queue.read { db in
-            db.trace { debugPrint($0) }
             return try T.fetchAll(db, request)
         }
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime

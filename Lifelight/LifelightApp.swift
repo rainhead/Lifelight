@@ -18,7 +18,8 @@ struct LifelightApp: App {
             ContentView()
                 .onAppear() {
                     Task {
-                        await iNaturalistAPI.fetchObservations(byUser: userName)
+                        let maxId = LLObservation.highestId()
+                        await iNaturalistAPI.fetchObservations(byUser: userName, idAbove: maxId)
                     }
                 }
         }
