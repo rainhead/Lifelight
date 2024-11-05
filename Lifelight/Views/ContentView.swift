@@ -62,6 +62,18 @@ enum SearchRefinement: Equatable, Identifiable {
     }
 }
 
+struct Summary: FetchableRecord, Decodable {
+    let photoCount: Int
+    let observationCount: Int
+    let taxonCount: Int
+    
+    init(of photos: [LLPhotoWithObservation]) {
+        photoCount = photos.count
+        observationCount = Set(photos.map(\.observation.id)).count
+        taxonCount = Set(photos.map(\.observation.taxonId)).count
+    }
+}
+
 struct ContentView: View {
     @State var photosByDay: [(Date, [LLPhotoWithObservation].SubSequence)] = []
     
@@ -70,13 +82,17 @@ struct ContentView: View {
     @State var selectedRefinements = [SearchRefinement]()
     @State var suggestedTaxa = [LLTaxon]()
     @State var suggestedMonths = [Month]()
+    @State var summary = Summary(of: [])
 
     var body: some View {
         NavigationStack {
             ScrollView {
-//                HStack {
-//                    Text("1914 photos from 1411 observations of 1222 taxa.")
-//                }
+                HStack {
+                    Text("\(summary.photoCount) photos from \(summary.observationCount) observations of \(summary.taxonCount) taxa.")
+                        .font(.caption)
+                        .fontWeight(.light)
+                }
+                .padding(.all, 10)
                 ForEach(photosByDay, id: \.0) { (day, photos) in
                     Section {
                         PhotoGrid(photos: photos)
@@ -153,6 +169,7 @@ struct ContentView: View {
         let request = dbRequest
         Task {
             let photos: [LLPhotoWithObservation] = await LLDatabase.shared.fetchAll(request: request)
+            self.summary = Summary(of: photos)
             let chunks = LLPhotoWithObservation.chunkByDay(photos: photos)
             photosByDay = chunks
         }
