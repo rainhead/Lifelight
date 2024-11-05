@@ -16,7 +16,7 @@ struct INaturalistAPI {
         return urlSession
     }()
     
-    func fetchObservations(byUser userName: String, idAbove: Int?) async {
+    func fetchObservations(byUser userName: String, idAbove: INaturalistObservation.ID?) async {
         var url = observationsBaseURL
         url.append(queryItems: [
             URLQueryItem(name: "fields", value: INaturalistObservation.fieldSpecification),

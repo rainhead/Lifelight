@@ -61,6 +61,8 @@ struct LLDatabase {
     }
         
     nonisolated func receiveObservations(_ observations: [INaturalistObservation]) {
+        guard !observations.isEmpty else { return }
+        
         addTaxa(observations.compactMap(\.taxon).map(\.llTaxon))
         addObservations(observations.map(\.llObservation))
         addObservationPhotos(observations.flatMap(\.llObservationPhotos))

@@ -73,20 +73,26 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                List(photosByDay, id: \.0) { (day, photos) in
-                    Section(day.formatted(date: .abbreviated, time: .omitted)) {
+            ScrollView {
+//                HStack {
+//                    Text("1914 photos from 1411 observations of 1222 taxa.")
+//                }
+                ForEach(photosByDay, id: \.0) { (day, photos) in
+                    Section {
                         PhotoGrid(photos: photos)
-                            .listRowInsets(.none)
+                            .padding(.bottom, 10)
+                    } header: {
+                        HStack {
+                            Text(day.formatted(date: .abbreviated, time: .omitted))
+                                .font(.headline)
+                                .padding(.leading, 10)
+                            Spacer()
+                        }
                     }
-                    .listSectionSeparator(.hidden)
-                    .listRowSeparator(.hidden)
                 }
-#if os(macOS)
-                .listStyle(.plain)
-#else
-                .listStyle(.grouped)
-#endif
+            }
+            .refreshable {
+                debugPrint("Refresh!")
             }
             .onChange(of: selectedRefinements, initial: true) {
                 debugPrint("Reloading observations due to query change")

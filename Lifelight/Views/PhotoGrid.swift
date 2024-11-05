@@ -23,10 +23,6 @@ struct PhotoGrid: View {
                         Link(destination: photo.observation.uri) {
                             image
                                 .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                                .clipped()
-                                .aspectRatio(1, contentMode: .fit)
                         }
                     } else if state.error != nil {
                         Color.red
@@ -35,6 +31,10 @@ struct PhotoGrid: View {
                     }
                 }
                 .pipeline(PhotoGrid.pipeline)
+                .aspectRatio(contentMode: .fill)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                .clipped()
+                .aspectRatio(1, contentMode: .fit)
                 .frame(minHeight: imageWidth)
             }
         }

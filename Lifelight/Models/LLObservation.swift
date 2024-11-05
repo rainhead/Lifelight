@@ -20,10 +20,10 @@ struct LLObservation: Codable, Identifiable, FetchableRecord, PersistableRecord 
     let taxonId: LLTaxon.ID?
     let uri: URL
     
-    static func highestId() -> Int? {
+    static func highestId() -> ID? {
         let queue = LLDatabase.shared.queue
         return try! queue.read { db in
-            return try Int.fetchOne(db, sql: "SELECT MAX(id) FROM observations")
+            return try ID.fetchOne(db, sql: "SELECT MAX(id) FROM observations")
         }
     }
 }
