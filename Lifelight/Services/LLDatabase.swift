@@ -18,6 +18,7 @@ struct LLDatabase {
         do {
             let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("lifelight.sqlite")
             debugPrint("Initializing database at \(path.absoluteString)")
+            Inflections.default.irregularSuffix("taxon", "taxa")
             self.queue = try DatabaseQueue(path: path.absoluteString)
             try queue.write { db in
                 try db.create(table: "taxa", ifNotExists: true) { t in

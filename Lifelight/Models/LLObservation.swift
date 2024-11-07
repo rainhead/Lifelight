@@ -20,11 +20,19 @@ struct LLObservation: Codable, Identifiable, FetchableRecord, PersistableRecord 
     let taxonId: LLTaxon.ID?
     let uri: URL
     
+    var taxon: QueryInterfaceRequest<LLTaxon> {
+        request(for: LLObservation.taxon)
+    }
+    
     static func highestId() -> ID? {
         let queue = LLDatabase.shared.queue
         return try! queue.read { db in
             return try ID.fetchOne(db, sql: "SELECT MAX(id) FROM observations")
         }
+    }
+    
+    static func duringMonths(_ months: [Month]) -> SQLExpression {
+        months.contains(SQL("cast(strftime('%m', coalesce(observations.observedOn, observations.createdAt)) as integer)"))
     }
 }
 
@@ -37,4 +45,11 @@ extension LLObservation {
     var observedOrCreatedOn: Date {
         observedOn ?? Calendar.current.startOfDay(for: createdAt)
     }
+}
+
+struct LLObservationWithTaxon: Identifiable, FetchableRecord, Decodable {
+    let observation: LLObservation
+    let taxon: LLTaxon?
+    
+    var id: LLObservation.ID { observation.id }
 }

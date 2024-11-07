@@ -8,40 +8,7 @@
 import SwiftUI
 import Combine
 import GRDB
-
-enum Month: Int, Equatable, Identifiable, CaseIterable {
-    case january = 1
-    case february = 2
-    case march = 3
-    case april = 4
-    case may = 5
-    case june = 6
-    case july = 7
-    case august = 8
-    case september = 9
-    case october = 10
-    case november = 11
-    case december = 12
-    
-    var id: Self { self }
-    
-    var asString: String {
-        switch self {
-        case .january: "January"
-        case .february: "February"
-        case .march: "March"
-        case .april: "April"
-        case .may: "May"
-        case .june: "June"
-        case .july: "July"
-        case .august: "August"
-        case .september: "September"
-        case .october: "October"
-        case .november: "November"
-        case .december: "December"
-        }
-    }
-}
+import UniformTypeIdentifiers
 
 enum SearchRefinement: Equatable, Identifiable {
     case month(Month)
@@ -83,6 +50,7 @@ struct ContentView: View {
     @State var suggestedTaxa = [LLTaxon]()
     @State var suggestedMonths = [Month]()
     @State var summary = Summary(of: [])
+    @State var exportDialogIsPresented = false
 
     var body: some View {
         NavigationStack {
@@ -105,6 +73,19 @@ struct ContentView: View {
                             Spacer()
                         }
                     }
+                }
+            }
+            .navigationTitle("My Observations")
+            .toolbar {
+                ToolbarItemGroup {
+                    Button("Export") {
+                        exportDialogIsPresented = true
+                    }
+                }
+            }
+            .fileExporter(isPresented: $exportDialogIsPresented, document: document, contentType: UTType.commaSeparatedText, defaultFilename: "my_observations.csv") { result in
+                if case let .failure(error) = result {
+                    debugPrint(error)
                 }
             }
             .refreshable {
@@ -150,19 +131,37 @@ struct ContentView: View {
         }
     }
     
+    var selectedTaxa: [LLTaxon] {
+        selectedRefinements.compactMap { if case let .taxon(taxon) = $0 { taxon } else { nil } }
+    }
+    
+    var selectedMonths: [Month] {
+        selectedRefinements.compactMap { if case let .month(month) = $0 { month } else { nil } }
+    }
+    
     // Any of these taxa (if any) AND any of these months (if any)
     var dbRequest: QueryInterfaceRequest<LLObservationPhoto> {
-        var observation = LLObservationPhoto.observation
-        let selectedTaxa = selectedRefinements.compactMap { if case let .taxon(taxon) = $0 { taxon.id } else { nil } }
+        var observations = LLObservationPhoto.observation
         if !selectedTaxa.isEmpty {
-            let cte = LLTaxon.descendants(of: selectedTaxa)
-            observation = observation.with(cte).filter(cte.all().contains(Column("taxonId")))
+            let cte = LLTaxon.includingDecendants(of: selectedTaxa)
+            observations = observations.with(cte).filter(cte.all().contains(Column("taxonId")))
         }
-        let selectedMonths = selectedRefinements.compactMap { if case let .month(month) = $0 { month.rawValue } else { nil } }
         if !selectedMonths.isEmpty {
-            observation = observation.filter(selectedMonths.contains(SQL("cast(strftime('%m', coalesce(observations.observedOn, observations.createdAt)) as integer)")))
+            observations = observations.filter(LLObservation.duringMonths(selectedMonths))
         }
-        return LLObservationPhoto.including(required: observation).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
+        return LLObservationPhoto.including(required: observations).order(sql: "coalesce(observedOn, observations.createdAt) DESC")
+    }
+    
+    var document: LLObservationFile {
+        var observations = LLObservation.including(required: LLObservation.taxon)
+        if !selectedTaxa.isEmpty {
+            let cte = LLTaxon.includingDecendants(of: selectedTaxa)
+            observations = observations.with(cte).filter(cte.all().contains(Column("taxonId")))
+        }
+        if !selectedMonths.isEmpty {
+            observations = observations.filter(LLObservation.duringMonths(selectedMonths))
+        }
+        return LLObservationFile(request: observations)
     }
     
     func reloadPhotos() {
