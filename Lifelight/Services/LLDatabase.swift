@@ -33,6 +33,9 @@ struct LLDatabase {
                     t.primaryKey("id", .integer)
                     t.column("createdAt", .datetime).notNull()
                     t.column("description", .text)
+                    t.column("latitude", .double).indexed()
+                    t.column("longitude", .double).indexed()
+                    t.column("locationObscured", .boolean)
                     t.column("observedAt", .datetime)
                     t.column("observedOn", .date)
                     t.column("updatedAt", .datetime).notNull()
@@ -113,7 +116,10 @@ struct LLDatabase {
     nonisolated func fetchAll<T: FetchableRecord & Sendable>(request: some FetchRequest) async -> [T] {
         let startTime = CFAbsoluteTimeGetCurrent()
         let records = try! await LLDatabase.shared.queue.read { db in
-            return try T.fetchAll(db, request)
+            db.trace(options: .statement) { debugPrint($0) }
+            let records = try T.fetchAll(db, request)
+            db.trace(options: .statement, nil)
+            return records
         }
         let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
         debugPrint("Done selecting data. Elapsed time: \(timeElapsed) seconds.")

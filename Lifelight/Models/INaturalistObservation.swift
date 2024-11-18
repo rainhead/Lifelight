@@ -15,20 +15,23 @@ struct INaturalistObservation: Decodable, Equatable, Identifiable, Hashable {
     + "quality_grade:!t,faves_count:!t,"
     + "identifications:\(INaturalistIdentification.fieldSpecification),"
     + "taxon:\(INaturalistTaxon.fieldSpecification),user:\(INaturalistUser.fieldSpecification),"
-    + "observation_photos:\(INaturalistObservationPhoto.fieldDescription),location:!t)"
+    + "observation_photos:\(INaturalistObservationPhoto.fieldDescription),location:!t,obscured:!t)"
 
     let id: Int64
 
     let annotations: [INaturalistAnnotation]
     let created_time_zone: String
     let description: String?
-    let geoprivacy: Geoprivacy?
     let identifications: [INaturalistIdentification]
     let observation_photos: [INaturalistObservationPhoto]
     let taxon: INaturalistTaxon?
     let uri: URL
     let uuid: UUID
     
+    let geoprivacy: Geoprivacy?
+    let location: String?
+    let obscured: Bool
+
     let created_at: String
     let updated_at: String
     let observed_on: String?
@@ -50,10 +53,14 @@ struct INaturalistObservation: Decodable, Equatable, Identifiable, Hashable {
     }
     
     var llObservation: LLObservation {
-        LLObservation(
+        let components = (location ?? "").split(separator: ",").map(Double.init)
+        return LLObservation(
             id: id,
             createdAt: created_at.asDate()!,
             description: description,
+            latitude: components[0],
+            longitude: components[1],
+            locationObscured: geoprivacy == .obscured,
             observedAt: time_observed_at?.asDate(),
             observedOn: observed_on?.asDay(),
             updatedAt: updated_at.asDate()!,
